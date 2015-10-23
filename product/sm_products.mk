@@ -18,28 +18,18 @@ ifneq ($(filter %z3,$(TARGET_PRODUCT)),)
   TARGET_DEVICE := z3
 endif
 
-ifneq ($(filter %huashan,$(TARGET_PRODUCT)),)
-  TARGET_DEVICE := huashan
+ifneq ($(filter %z3c,$(TARGET_PRODUCT)),)
+  TARGET_DEVICE := z3c
 endif
 
-ifneq ($(filter %awifi,$(TARGET_PRODUCT)),)
-  TARGET_DEVICE := awifi
+ifneq ($(filter %sirius,$(TARGET_PRODUCT)),)
+  TARGET_DEVICE := sirius
 endif
 
 # Filter ROM base
-ifneq ($(filter aosp% boostpop% pa% twisted% rnx%,$(TARGET_PRODUCT)),)
-  TARGET_BASE_ROM := aosp
-  include $(SM_VENDOR)/product/aosp_product.mk
-endif
-
-ifneq ($(filter slim% aicp% cm%,$(TARGET_PRODUCT)),)
+ifneq ($(filter carbon%,$(TARGET_PRODUCT)),)
   TARGET_BASE_ROM := cm
   include $(SM_VENDOR)/product/cm_product.mk
-endif
-
-# PA
-ifneq ($(filter pa%,$(TARGET_PRODUCT)),)
-  NO_OTA_BUILD := true
 endif
 
 # General ROM strings

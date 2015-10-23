@@ -23,8 +23,13 @@ ifneq ($(filter z3,$(TARGET_DEVICE)),)
   LOCAL_ARCH := arm
 endif
 
-ifneq ($(filter huashan,$(TARGET_DEVICE)),)
-  include $(SM_VENDOR)/device/sm_huashan.mk
+ifneq ($(filter z3c,$(TARGET_DEVICE)),)
+  include $(SM_VENDOR)/device/sm_z3c.mk
+  LOCAL_ARCH := arm
+endif
+
+ifneq ($(filter sirius,$(TARGET_DEVICE)),)
+  include $(SM_VENDOR)/device/sm_sirius.mk
   LOCAL_ARCH := arm
 endif
 
@@ -37,4 +42,3 @@ endif
 ifeq ($(strip $(LOCAL_ARCH)),arm64)
 export CROSS_COMPILE_NAME := aarch64-$(HOST_OS)-gnu-
 endif
-

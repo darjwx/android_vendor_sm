@@ -13,63 +13,55 @@
 # limitations under the License.
 #
 
-# Device specific Sabermod configs
-TARGET_SM_AND := 4.9
+# Sabermod configs
 TARGET_SM_KERNEL := 4.9
+Z3C_THREADS := 4
+PRODUCT_THREADS := $(Z3C_THREADS)
 LOCAL_STRICT_ALIASING := true
-export LOCAL_O3 := true
+LOCAL_O3 := true
 
-# Configs for ROM on GCC 4.8
-ifeq ($(strip $(TARGET_SM_AND)),4.8)
+LOCAL_DISABLE_STRICT_ALIASING := \
+	libcrypto_static \
+	gatt_testtool \
+	libssh \
+	ssh \
+	libsurfaceflinger \
+	libOmxVenc \
+	lsof
 
-endif
+LOCAL_DISABLE_GRAPHITE := libncurses
 
-# Configs for ROM on GCC 4.9
-ifeq ($(strip $(TARGET_SM_AND)),4.9)
-  LOCAL_DISABLE_O3 := \
-    libminshacrypt \
-    libFraunhoferAAC
-
-  NO_OPTIMIZATIONS := \
-    libFraunhoferAAC
-endif
-
-ifneq ($(filter 4.9,$(TARGET_SM_KERNEL)),)
   GRAPHITE_KERNEL_FLAGS := \
+    -floop-parallelize-all \
+    -ftree-parallelize-loops=$(PRODUCT_THREADS) \
     -fopenmp
-endif
+
+  ifneq ($(filter 5% 6%,$(TARGET_SM_AND)),)
+    LOCAL_DISABLE_GRAPHITE := \
+      camera.msm8974
+  endif
+
+# General flags for gcc 4.9 to allow compilation to complete.
+MAYBE_UNINITIALIZED := \
+  hwcomposer.msm8974
 
 # Extra SaberMod GCC C flags for arch target and Kernel
 export EXTRA_SABERMOD_GCC_VECTORIZE := \
          -mvectorize-with-neon-quad
 
+ifeq ($(strip $(ENABLE_STRICT_ALIASING)),true)
 
-ifeq ($(strip $(LOCAL_STRICT_ALIASING)),true)
+  # Enable strict-aliasing kernel flags
+export CONFIG_MACH_MSM8974_Z3C_STRICT_ALIASING := y
 
-  # Disable lists for GCC4.8/4.9
-  ifeq ($(strip $(TARGET_SM_AND)),4.8)
-    DISABLE_STRICT := \
-      gatt_testtool
-
-    LOCAL_DISABLE_GRAPHITE := \
-      libncurses
-  endif
-
-  ifeq ($(strip $(TARGET_SM_AND)),4.9)
-    DISABLE_STRICT := \
-      gatt_testtool
-
-    LOCAL_DISABLE_GRAPHITE := \
-      libncurses
-  endif
-
-  # Check if something is already set in configs/sm.mk
+  # Check if something is already set in product/sm_products.mk
   ifndef LOCAL_DISABLE_STRICT_ALIASING
     LOCAL_DISABLE_STRICT_ALIASING := \
-      $(DISABLE_STRICT)
+      libmmcamera_interface \
+      camera.msm8974
   else
     LOCAL_DISABLE_STRICT_ALIASING += \
-      $(DISABLE_STRICT)
+      libmmcamera_interface \
+      camera.msm8974
   endif
 endif
-
