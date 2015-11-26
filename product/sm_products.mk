@@ -26,6 +26,9 @@ ifneq ($(filter %sirius,$(TARGET_PRODUCT)),)
   TARGET_DEVICE := sirius
 endif
 
+ifneq ($(filter %huashan,$(TARGET_PRODUCT)),)
+  TARGET_DEVICE := huashan
+
 # Filter ROM base
 ifneq ($(filter carbon%,$(TARGET_PRODUCT)),)
   TARGET_BASE_ROM := cm

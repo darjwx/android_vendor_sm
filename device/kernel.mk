@@ -29,6 +29,14 @@ ifneq ($(filter %sirius,$(TARGET_PRODUCT)),)
   endif
 endif
 
+ifneq ($(filter %huashan,$(TARGET_PRODUCT)),)
+  KERNEL_DIR := kernel/sony/msm8960t
+  KERNEL_BINARY_IMAGE := zImage-dtb
+  ifneq ($(filter carbon%,$(TARGET_PRODUCT)),)
+    KERNEL_DEFCONFIG := cm_huashan_defconfig
+  endif
+endif
+
 ifdef KERNEL_DIR
   include $(KERNEL_DIR)/AndroidKernel.mk
 endif
